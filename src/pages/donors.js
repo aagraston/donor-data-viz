@@ -5,7 +5,7 @@ const Donors = () => {
   return (
     <Layout>
     <h1>Donors</h1>
-    <p>A page for displaying Donor information</p>
+    <p>A page for displaying Donor information.</p>
     </Layout>
   )
 }
