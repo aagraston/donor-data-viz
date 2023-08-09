@@ -1,5 +1,8 @@
 // //data processing for raw JSON,
 
+const backgroundColor = "#ffffff";
+const lineColor = '#ddd043'
+
 const getDataForYear = (amounts, dates, year) => {
   let jan,
     feb,
@@ -15,18 +18,18 @@ const getDataForYear = (amounts, dates, year) => {
     dec = 0;
   let totals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   let labels = [
-    "jan",
-    "feb",
-    "mar",
-    "apr",
-    "may",
-    "jun",
-    "jul",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   for (let i = 0; i < amounts.length; i++) {
@@ -35,20 +38,21 @@ const getDataForYear = (amounts, dates, year) => {
     const curYear = curDate.getFullYear();
 
     if (curYear == year) {
-      console.log(curYear);
-      totals[curMonth] += amounts[i]
+      totals[curMonth] += amounts[i];
     }
   }
 
-  return ({
+  return {
     datasets: [
       {
-        label: `Donations For ${year}`,
+        label: `${year}`,
         data: totals,
-      }
+        backgroundColor: backgroundColor,
+        borderColor: lineColor,
+      },
     ],
     labels: labels,
-  })
+  };
 };
 
 const getDataForYearTotalDonations = (amounts, dates, year) => {
@@ -58,7 +62,6 @@ const getDataForYearTotalDonations = (amounts, dates, year) => {
     const curYear = curDate.getFullYear();
 
     if (curYear == year) {
-      console.log(curYear);
     }
   }
 };

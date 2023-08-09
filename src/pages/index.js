@@ -1,18 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/layout";
+
+//material ui
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem  from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card"
+import Card from "@material-ui/core/Card";
 
-import {Chart as ChartJS, registerables } from 'chart.js'
+//chart elements
+import { Chart as ChartJS, registerables } from "chart.js";
 import { Line, Chart } from "react-chartjs-2";
 
-import { getDataForYear } from "../utils/donations-processor";
-
+//data-retrieval
 import { graphql, useStaticQuery } from "gatsby";
+
+//data processing
+import { getDataForYear } from "../utils/donations-processor";
+import { yearsArray } from "../utils/last-five-years";
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -20,9 +29,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Home = () => {
+const years = yearsArray()
 
-  ChartJS.register(...registerables)
+const Home = () => {
+  ChartJS.register(...registerables);
 
   //data processing
   const data = useStaticQuery(graphql`
@@ -42,6 +52,7 @@ const Home = () => {
 
   const donationAmounts = [];
   const donationDates = [];
+  const [dataSelection, setDataSelection] = useState(2022);
 
   data.allDonorDataJson.edges.forEach((e) => {
     e.node.donations.forEach((e) => {
@@ -50,23 +61,54 @@ const Home = () => {
     });
   });
 
-  const dataForLineChart = getDataForYear(donationAmounts, donationDates, 2021);
+  const dataForLineChart = getDataForYear(donationAmounts, donationDates, dataSelection);
 
   const styles = useStyles();
+
+  const handleDataUpdate = (event) => {
+    if (event.target.value === "Last Five Years") {
+      setDataSelection("Last Five Years")
+    }
+    else {
+      setDataSelection(event.target.value)
+    }
+  }
 
   return (
     <Layout>
       <Container maxWidth="lg">
         <Paper className={styles.section}>
           <h1>Welcome Aaron</h1>
+          <hr />
+
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item>
+              <h2>Donation data from</h2>
+            </Grid>
+            <Grid item>
+              <FormControl>
+                <Select
+                  labelId="simple-selection"
+                  id="simple-select"
+                  value={dataSelection}
+                  label={"dataSelector"}
+                  onChange={handleDataUpdate}
+                >
+                  <MenuItem value={`Last Five Years`}>Last Five Years</MenuItem>
+                  <MenuItem value={years[0]}>{years[0]}</MenuItem>
+                  <MenuItem value={years[1]}>{years[1]}</MenuItem>
+                  <MenuItem value={years[2]}>{years[2]}</MenuItem>
+                  <MenuItem value={years[3]}>{years[3]}</MenuItem>
+                  <MenuItem value={years[4]}>{years[4]}</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
 
           <Grid container spacing={2}>
             <Grid item lg={8}>
               <Card variant="outlined">
-                <Line
-                  datasetIdKey="id"
-                  data= {dataForLineChart}
-                />
+                <Line datasetIdKey="id" data={dataForLineChart} />
               </Card>
             </Grid>
             <Grid item lg={4}>
