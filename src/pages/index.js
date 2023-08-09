@@ -10,6 +10,7 @@ import Card from "@material-ui/core/Card"
 import {Chart as ChartJS, registerables } from 'chart.js'
 import { Line, Chart } from "react-chartjs-2";
 
+import { getDataForYear } from "../utils/donations-processor";
 
 import { graphql, useStaticQuery } from "gatsby";
 
@@ -49,6 +50,8 @@ const Home = () => {
     });
   });
 
+  const dataForLineChart = getDataForYear(donationAmounts, donationDates, 2021);
+
   const styles = useStyles();
 
   return (
@@ -62,16 +65,7 @@ const Home = () => {
               <Card variant="outlined">
                 <Line
                   datasetIdKey="id"
-                  data={{
-                    labels: ['Jun', 'Jul', 'Aug'],
-                    datasets: [
-                      {
-                        id: 1,
-                        label: '',
-                        data: [4, 7, 3, 6, 2],
-                      },
-                    ],
-                  }}
+                  data= {dataForLineChart}
                 />
               </Card>
             </Grid>
