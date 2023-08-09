@@ -12,6 +12,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 
+//animation
+import CountUp from 'react-countup'
+
 //chart elements
 import { Chart as ChartJS, registerables } from "chart.js";
 import { Line, Chart } from "react-chartjs-2";
@@ -20,12 +23,16 @@ import { Line, Chart } from "react-chartjs-2";
 import { graphql, useStaticQuery } from "gatsby";
 
 //data processing
-import { getDataForYear } from "../utils/donations-processor";
+import { getDataForYear, getDataForYearTotalDonations } from "../utils/donations-processor";
 import { yearsArray } from "../utils/last-five-years";
 
 const useStyles = makeStyles((theme) => ({
   section: {
     padding: "2rem",
+  },
+  bigData: {
+    fontSize: "5rem",
+    fontStyle: "bold",
   },
 }));
 
@@ -53,6 +60,7 @@ const Home = () => {
   const donationAmounts = [];
   const donationDates = [];
   const [dataSelection, setDataSelection] = useState(2022);
+  const [yearDonations, setDataDonations] = useState(0);
 
   data.allDonorDataJson.edges.forEach((e) => {
     e.node.donations.forEach((e) => {
@@ -71,6 +79,8 @@ const Home = () => {
     }
     else {
       setDataSelection(event.target.value)
+      let yearAmount = getDataForYearTotalDonations(donationAmounts, donationDates, event.target.value)
+      setDataDonations(yearAmount)
     }
   }
 
@@ -112,7 +122,14 @@ const Home = () => {
               </Card>
             </Grid>
             <Grid item lg={4}>
-              <Card variant="outlined">Some words</Card>
+              <Card variant="outlined" className={styles.section}>
+                <h3>Donations</h3>
+                <CountUp className={styles.bigData}
+                end={yearDonations} 
+                prefix="$"/>
+                <h3>Donors</h3>
+                <h1>42</h1>
+              </Card>
             </Grid>
           </Grid>
         </Paper>

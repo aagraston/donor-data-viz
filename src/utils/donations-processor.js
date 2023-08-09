@@ -1,7 +1,7 @@
 // //data processing for raw JSON,
 
 const backgroundColor = "#ffffff";
-const lineColor = '#ddd043'
+const lineColor = "#ddd043";
 
 const getDataForYear = (amounts, dates, year) => {
   let jan,
@@ -56,14 +56,19 @@ const getDataForYear = (amounts, dates, year) => {
 };
 
 const getDataForYearTotalDonations = (amounts, dates, year) => {
+  let total = 0;
+
   for (let i = 0; i < amounts.length; i++) {
     const curDate = new Date(dates[i]);
-    const curMonth = curDate.getMonth();
     const curYear = curDate.getFullYear();
 
     if (curYear == year) {
+      total += amounts[i];
+      
     }
   }
+
+  return total;
 };
 
 export { getDataForYear, getDataForYearTotalDonations };
