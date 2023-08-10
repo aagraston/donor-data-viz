@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../components/layout";
 
 //material ui
@@ -7,13 +7,13 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
-import MenuItem  from "@material-ui/core/MenuItem";
+import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 
 //animation
-import CountUp from 'react-countup'
+import CountUp from "react-countup";
 
 //chart elements
 import { Chart as ChartJS, registerables } from "chart.js";
@@ -23,7 +23,11 @@ import { Line, Chart } from "react-chartjs-2";
 import { graphql, useStaticQuery } from "gatsby";
 
 //data processing
-import { getDataForYear, getDataForYearTotalDonations } from "../utils/donations-processor";
+import {
+  getDataForYear,
+  getDataForYearTotalDonations,
+  getDataDonorsForYear,
+} from "../utils/donations-processor";
 import { yearsArray } from "../utils/last-five-years";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,12 +35,13 @@ const useStyles = makeStyles((theme) => ({
     padding: "2rem",
   },
   bigData: {
-    fontSize: "5rem",
+    fontSize: "3em",
     fontStyle: "bold",
+    color: "#ddd043",
   },
 }));
 
-const years = yearsArray()
+const years = yearsArray();
 
 const Home = () => {
   ChartJS.register(...registerables);
@@ -61,6 +66,22 @@ const Home = () => {
   const donationDates = [];
   const [dataSelection, setDataSelection] = useState(2022);
   const [yearDonations, setDataDonations] = useState(0);
+  const [yearDonors, setDataDonors] = useState(0);
+
+  //initialize data
+  useEffect(() => {
+    let yearAmount = getDataForYearTotalDonations(
+      donationAmounts,
+      donationDates,
+      dataSelection
+    );
+    let donorAmount = getDataDonorsForYear(
+      data.allDonorDataJson.edges,
+      dataSelection
+    );
+    setDataDonations(yearAmount);
+    setDataDonors(donorAmount);
+  }, []);
 
   data.allDonorDataJson.edges.forEach((e) => {
     e.node.donations.forEach((e) => {
@@ -69,20 +90,32 @@ const Home = () => {
     });
   });
 
-  const dataForLineChart = getDataForYear(donationAmounts, donationDates, dataSelection);
+  const dataForLineChart = getDataForYear(
+    donationAmounts,
+    donationDates,
+    dataSelection
+  );
 
   const styles = useStyles();
 
   const handleDataUpdate = (event) => {
     if (event.target.value === "Last Five Years") {
-      setDataSelection("Last Five Years")
+      setDataSelection("Last Five Years");
+    } else {
+      setDataSelection(event.target.value);
+      let yearAmount = getDataForYearTotalDonations(
+        donationAmounts,
+        donationDates,
+        event.target.value
+      );
+      let donorAmount = getDataDonorsForYear(
+        data.allDonorDataJson.edges,
+        event.target.value
+      );
+      setDataDonations(yearAmount);
+      setDataDonors(donorAmount);
     }
-    else {
-      setDataSelection(event.target.value)
-      let yearAmount = getDataForYearTotalDonations(donationAmounts, donationDates, event.target.value)
-      setDataDonations(yearAmount)
-    }
-  }
+  };
 
   return (
     <Layout>
@@ -124,11 +157,13 @@ const Home = () => {
             <Grid item lg={4}>
               <Card variant="outlined" className={styles.section}>
                 <h3>Donations</h3>
-                <CountUp className={styles.bigData}
-                end={yearDonations} 
-                prefix="$"/>
+                <CountUp
+                  className={styles.bigData}
+                  end={yearDonations}
+                  prefix=""
+                />
                 <h3>Donors</h3>
-                <h1>42</h1>
+                <h1>{yearDonors}</h1>
               </Card>
             </Grid>
           </Grid>

@@ -71,4 +71,30 @@ const getDataForYearTotalDonations = (amounts, dates, year) => {
   return total;
 };
 
-export { getDataForYear, getDataForYearTotalDonations };
+const getDataDonorsForYear = (totalDonors, year) => {
+
+  let donorCount = 0
+
+  for (let i = 0; i < totalDonors.length; i++) {
+    
+    let donationsArray = totalDonors[i].node.donations
+
+    for (let x = 0; x < donationsArray.length; x++) {
+      
+      let curYear = new Date(donationsArray[x].date).getFullYear()
+
+      console.log(curYear)
+      console.log(year)
+
+      if (curYear == year) {
+        donorCount += 1
+        break
+      }
+    }
+  }
+
+  return donorCount
+
+}
+
+export { getDataForYear, getDataForYearTotalDonations, getDataDonorsForYear };
