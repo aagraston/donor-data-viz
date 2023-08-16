@@ -1,7 +1,9 @@
 import React from "react";
 import Layout from "../components/layout";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { StylesProvider, makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 
 import WelcomeBoard from "../components/homepage/welcome-board";
 import BestMonthCard from "../components/homepage/best-month";
@@ -44,8 +46,16 @@ const Home = () => {
   return (
     <Layout>
       <WelcomeBoard data={data} styles={styles} />
-      <BestMonthCard data={data} styles={styles} />
-      <TopDonorsCard data={data} styles={styles} />
+      <Container maxWidth="lg">
+        <Grid container justifyContent="start" spacing={2}>
+          <Grid item>
+            <BestMonthCard data={data} styles={styles} />
+          </Grid>
+          <Grid item>
+            <TopDonorsCard data={data} styles={styles} />
+          </Grid>
+        </Grid>
+      </Container>
     </Layout>
   );
 };
