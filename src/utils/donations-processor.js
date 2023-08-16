@@ -83,9 +83,6 @@ const getDataDonorsForYear = (totalDonors, year) => {
       
       let curYear = new Date(donationsArray[x].date).getFullYear()
 
-      console.log(curYear)
-      console.log(year)
-
       if (curYear == year) {
         donorCount += 1
         break
