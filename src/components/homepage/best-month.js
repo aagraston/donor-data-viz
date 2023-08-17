@@ -12,8 +12,9 @@ const BestMonthCard = (props) => {
   return (
     <Paper className={props.styles.section}>
       <p>
-        Your best month for <strong>{props.dataSelection}</strong> was {bestMonthData.monthName}
+        Your best month for donations in <strong>{props.dataSelection}</strong> was <strong>{bestMonthData.monthName}</strong> with
       </p>
+      <p className={props.styles.centerText}><strong>{bestMonthData.monthTotal}</strong> in donations</p>
     </Paper>
   );
 };

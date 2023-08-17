@@ -80,40 +80,40 @@ const getDataDonorsForYear = (totalDonors, year) => {
 const monthNumToShortName = (num) => {
   switch (num) {
     case 0:
-      return 'Jan'
+      return "Jan";
       break;
     case 1:
-      return 'Feb'
+      return "Feb";
       break;
     case 2:
-      return 'Mar'
+      return "Mar";
       break;
     case 3:
-      return 'Apr'
+      return "Apr";
       break;
     case 4:
-      return 'May'
+      return "May";
       break;
     case 5:
-      return 'Jun'
+      return "Jun";
       break;
     case 6:
-      return 'Jul'
+      return "Jul";
       break;
     case 7:
-      return 'Aug'
+      return "Aug";
       break;
     case 8:
-      return 'Sep'
+      return "Sep";
       break;
     case 9:
-      return 'Oct'
+      return "Oct";
       break;
     case 10:
-      return 'Nov'
+      return "Nov";
       break;
     case 11:
-      return 'Dec'
+      return "Dec";
       break;
   }
 };
@@ -121,40 +121,40 @@ const monthNumToShortName = (num) => {
 const monthNumToLongName = (num) => {
   switch (num) {
     case 0:
-      return 'January'
+      return "January";
       break;
     case 1:
-      return 'February'
+      return "February";
       break;
     case 2:
-      return 'March'
+      return "March";
       break;
     case 3:
-      return 'April'
+      return "April";
       break;
     case 4:
-      return 'May'
+      return "May";
       break;
     case 5:
-      return 'June'
+      return "June";
       break;
     case 6:
-      return 'July'
+      return "July";
       break;
     case 7:
-      return 'August'
+      return "August";
       break;
     case 8:
-      return 'September'
+      return "September";
       break;
     case 9:
-      return 'October'
+      return "October";
       break;
     case 10:
-      return 'November'
+      return "November";
       break;
     case 11:
-      return 'December'
+      return "December";
       break;
   }
 };
@@ -181,12 +181,42 @@ const getBestMonth = (amounts, dates, year) => {
     curMonthTotal = 0;
   }
 
-  let monthName = monthNumToLongName(bestMonth)
+  let monthName = monthNumToLongName(bestMonth);
   let returnObj = {
     monthName: monthName,
-    monthTotal: bestMonthTotal
+    monthTotal: bestMonthTotal,
+  };
+  return returnObj;
+};
+
+const topDonorForYear = (donors, year) => {
+  let topDonor = "";
+  let curDonations = 0;
+  let topDonations = 0;
+
+  for (let i = 0; i < donors.length; i++) {
+    for (let x = 0; x < donors[i].node.donations.length; x++) {
+      const curDate = new Date(donors[i].node.donations[x].date);
+      const curYear = curDate.getFullYear();
+
+      if (curYear == year) {
+        curDonations += donors[i].node.donations[x].amount;
+      }
+    }
+
+    if (curDonations > topDonations) {
+      topDonations = curDonations;
+      topDonor = donors[i].node.username;
+    }
+    curDonations = 0
   }
-  return returnObj
+
+  let donorObj = {
+    topDonor: topDonor,
+    topDonations: topDonations,
+  };
+
+  return donorObj;
 };
 
 export {
@@ -194,4 +224,5 @@ export {
   getDataForYear,
   getDataForYearTotalDonations,
   getDataDonorsForYear,
+  topDonorForYear,
 };

@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     fontStyle: "bold",
     color: "#ddd043",
   },
+  centerText: {
+    textAlign: 'center'
+  }
 }));
 
 const Home = () => {
@@ -36,6 +39,7 @@ const Home = () => {
       allDonorDataJson {
         edges {
           node {
+            username
             donations {
               date
               amount
