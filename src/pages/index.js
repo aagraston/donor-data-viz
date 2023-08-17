@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/layout";
 
 import { StylesProvider, makeStyles } from "@material-ui/core/styles";
@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Home = () => {
+  const donationAmounts = [];
+  const donationDates = [];
+
+  const [dataSelection, setDataSelection] = useState(2022);
+
   //data processing
   const data = useStaticQuery(graphql`
     query {
@@ -41,18 +46,40 @@ const Home = () => {
     }
   `);
 
+  data.allDonorDataJson.edges.forEach((e) => {
+    e.node.donations.forEach((e) => {
+      donationAmounts.push(e.amount);
+      donationDates.push(e.date);
+    });
+  });
+
   const styles = useStyles();
 
   return (
     <Layout>
-      <WelcomeBoard data={data} styles={styles} />
+      <WelcomeBoard
+        donationAmounts={donationAmounts}
+        donationDates={donationDates}
+        dataSelection={dataSelection}
+        setDataSelection={setDataSelection}
+        data={data}
+        styles={styles}
+      />
       <Container maxWidth="lg">
         <Grid container justifyContent="start" spacing={2}>
           <Grid item>
-            <BestMonthCard data={data} styles={styles} />
+            <BestMonthCard
+              dataSelection={dataSelection}
+              data={data}
+              styles={styles}
+            />
           </Grid>
           <Grid item>
-            <TopDonorsCard data={data} styles={styles} />
+            <TopDonorsCard
+              dataSelection={dataSelection}
+              data={data}
+              styles={styles}
+            />
           </Grid>
         </Grid>
       </Container>

@@ -29,50 +29,41 @@ import { yearsArray } from "../../utils/last-five-years";
 const years = yearsArray();
 
 const WelcomeBoard = (props) => {
+  
   ChartJS.register(...registerables);
 
-  const donationAmounts = [];
-  const donationDates = [];
-  const [dataSelection, setDataSelection] = useState(2022);
   const [yearDonations, setDataDonations] = useState(0);
   const [yearDonors, setDataDonors] = useState(0);
 
   //initialize data
   useEffect(() => {
     let yearAmount = getDataForYearTotalDonations(
-      donationAmounts,
-      donationDates,
-      dataSelection
+      props.donationAmounts,
+      props.donationDates,
+      props.dataSelection
     );
     let donorAmount = getDataDonorsForYear(
       props.data.allDonorDataJson.edges,
-      dataSelection
+      props.dataSelection
     );
     setDataDonations(yearAmount);
     setDataDonors(donorAmount);
   }, []);
 
-  props.data.allDonorDataJson.edges.forEach((e) => {
-    e.node.donations.forEach((e) => {
-      donationAmounts.push(e.amount);
-      donationDates.push(e.date);
-    });
-  });
-
   const dataForLineChart = getDataForYear(
-    donationAmounts,
-    donationDates,
-    dataSelection
+    props.donationAmounts,
+    props.donationDates,
+    props.dataSelection
   );
 
   const handleDataUpdate = (event) => {
     if (event.target.value === "Last Five Years") {
-      setDataSelection("Last Five Years");
+      props.setDataSelection("Last Five Years");
     } else {
-      setDataSelection(event.target.value);
+      props.setDataSelection(event.target.value);
       let yearAmount = getDataForYearTotalDonations(
-        donationAmounts,
-        donationDates,
+        props.donationAmounts,
+        props.donationDates,
         event.target.value
       );
       let donorAmount = getDataDonorsForYear(
@@ -99,7 +90,7 @@ const WelcomeBoard = (props) => {
               <Select
                 labelId="simple-selection"
                 id="simple-select"
-                value={dataSelection}
+                value={props.dataSelection}
                 label={"dataSelector"}
                 onChange={handleDataUpdate}
               >
