@@ -66,9 +66,11 @@ const Home = () => {
         styles={styles}
       />
       <Container maxWidth="lg">
-        <Grid container justifyContent="start" spacing={2}>
+        <Grid container justifyContent="flex-start" spacing={2}>
           <Grid item>
             <BestMonthCard
+              donationAmounts={donationAmounts}
+              donationDates={donationDates}
               dataSelection={dataSelection}
               data={data}
               styles={styles}
@@ -76,6 +78,8 @@ const Home = () => {
           </Grid>
           <Grid item>
             <TopDonorsCard
+              donationAmounts={donationAmounts}
+              donationDates={donationDates}
               dataSelection={dataSelection}
               data={data}
               styles={styles}
