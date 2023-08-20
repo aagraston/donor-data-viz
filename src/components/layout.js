@@ -12,7 +12,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 const theme = createTheme({
   palette: {
-    type: "dark",
+    type: "light",
     primary: lime,
     secondary: purple,
   },

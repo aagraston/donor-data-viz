@@ -1,7 +1,7 @@
 // //data processing for raw JSON,
 
 const backgroundColor = "#ffffff";
-const lineColor = "#ddd043";
+const lineColor = "#107ab0";
 
 const getDataForYear = (amounts, dates, year) => {
   let totals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

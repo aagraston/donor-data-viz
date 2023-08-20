@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   bigData: {
     fontSize: "3em",
     fontStyle: "bold",
-    color: "#ddd043",
+    color: "#107ab0",
   },
   centerText: {
     textAlign: 'center'
